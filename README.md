@@ -6,7 +6,7 @@ MusicChat UI provides an intuitive interface for uploading, analyzing, and explo
 
 ## 🚀 Features
 
-### Current (Phase 1)
+### Current (Phase 1-2)
 - ✅ JWT authentication with auto-refresh
 - ✅ Responsive UI with Tailwind CSS
 - ✅ Component library with accessibility
@@ -14,14 +14,17 @@ MusicChat UI provides an intuitive interface for uploading, analyzing, and explo
 - ✅ API client with comprehensive error handling
 - ✅ WebSocket foundation for real-time updates
 - ✅ TypeScript for type safety
+- ✅ Drag-and-drop file upload with progress tracking
+- ✅ Real-time analysis progress via WebSocket
+- ✅ Job management and status tracking
+- ✅ Browser and toast notifications
 
-### Upcoming (Phase 2-4)
-- 📤 Drag-and-drop file upload with progress tracking
+### Upcoming (Phase 3-4)
 - 📊 Real-time visualization of 260+ audio features
 - 🎵 Synchronized audio playback with waveforms
+- 🎛️ Stem separation controls (vocals, drums, bass, other)
 - 🔍 Natural language queries ("find the drop", "high energy sections")
 - 📚 Track library management
-- 🎛️ Stem separation controls (vocals, drums, bass, other)
 
 ## 🛠️ Tech Stack
 
