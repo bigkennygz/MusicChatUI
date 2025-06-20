@@ -1,0 +1,1 @@
+export { StorageInfo } from './StorageInfo';

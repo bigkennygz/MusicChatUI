@@ -3,15 +3,7 @@ import type { AuthTokens, LoginCredentials, RegisterData, User, ApiKey } from '@
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<{ data: AuthTokens }> => {
-    const formData = new URLSearchParams();
-    formData.append('username', credentials.username);
-    formData.append('password', credentials.password);
-    formData.append('grant_type', 'password');
-    
-    const response = await apiClient.post<AuthTokens>('/api/v1/auth/login', formData, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    });
-    
+    const response = await apiClient.post<AuthTokens>('/api/v1/auth/login', credentials);
     return { data: response.data };
   },
 

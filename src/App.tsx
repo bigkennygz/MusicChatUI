@@ -8,6 +8,7 @@ import { ProtectedRoute } from '@features/auth/components/ProtectedRoute';
 import { LoginPage } from '@features/auth/components/LoginPage';
 import { MainLayout } from '@components/layout/MainLayout';
 import { Dashboard } from './pages/Dashboard';
+import { UploadPage } from '@features/upload/pages';
 import { ToastContainer } from '@components/ui/Toast';
 
 export default function App() {
@@ -31,7 +32,7 @@ export default function App() {
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="upload" element={<div>Upload Page (Coming Soon)</div>} />
+            <Route path="upload" element={<UploadPage />} />
             <Route path="analysis" element={<div>Analysis Page (Coming Soon)</div>} />
             <Route path="query" element={<div>Query Page (Coming Soon)</div>} />
             <Route path="library" element={<div>Library Page (Coming Soon)</div>} />
