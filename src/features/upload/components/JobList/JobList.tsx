@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { analysisApi } from '../../../../features/analysis/api/analysisApi';
 import { JobStatusCard } from '../JobStatusCard';
 import { Button } from '../../../../components/ui/Button';
+import type { AnalysisJob } from '../../../../types/analysis';
 
 export interface JobListProps {
   filter?: 'all' | 'pending' | 'processing' | 'completed' | 'failed';
@@ -25,14 +26,14 @@ export function JobList({ filter = 'all', onJobSelect }: JobListProps) {
   if (error) return <div className="text-center py-4 text-red-600">Error loading jobs</div>;
   if (!data) return null;
 
-  // Ensure data.items exists and is an array
-  console.log('JobList API response:', data);
-  const jobs = Array.isArray(data.items) ? data.items : [];
+  // Ensure data.jobs exists and is an array (backend returns 'jobs' not 'items')
+  // Remove console.log to reduce noise
+  const jobs = Array.isArray(data.jobs) ? data.jobs : [];
 
   return (
     <div className="space-y-4">
       <div className="grid gap-4">
-        {jobs.map((job) => (
+        {jobs.map((job: AnalysisJob) => (
           <JobStatusCard
             key={job.job_id}
             job={job}

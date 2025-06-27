@@ -36,10 +36,11 @@ export const analysisApi = {
     status?: string;
     page?: number;
     limit?: number;
-  }): Promise<PaginatedResponse<AnalysisJob>> => {
-    const response = await apiClient.get<PaginatedResponse<AnalysisJob>>('/api/v1/analyze', {
+  }): Promise<any> => {
+    const response = await apiClient.get<any>('/api/v1/analyze', {
       params,
     });
+    // Backend returns different structure, keep raw response for now
     return response.data;
   },
 
@@ -51,7 +52,13 @@ export const analysisApi = {
     return response.data;
   },
 
-  // Get audio file URL for playback
+  // Get signed audio URL for playback
+  getSignedAudioUrl: async (jobId: string): Promise<string> => {
+    const response = await apiClient.post<{ url: string }>(`/api/v1/analyze/${jobId}/audio/token`);
+    return response.data.url;
+  },
+
+  // Legacy: Get audio file URL for playback (deprecated - use getSignedAudioUrl)
   getAudioUrl: (jobId: string, stem?: string): string => {
     const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     if (stem) {

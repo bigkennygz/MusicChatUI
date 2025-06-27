@@ -58,21 +58,14 @@ export function useUploadQueue(options?: UseUploadQueueOptions) {
     }
   }, [maxConcurrent, getActiveUploads, getPendingUploads, uploadFile, options]);
 
-  // Process queue whenever uploads state changes
-  useEffect(() => {
-    const pending = getPendingUploads();
-    const active = getActiveUploads();
-    
-    // Process queue if we have pending items and available slots
-    if (pending.length > 0 && active.length < maxConcurrent) {
-      processQueue();
-    }
-  }, [activeUploads, maxConcurrent, processQueue, getActiveUploads, getPendingUploads]);
+  // Only process queue when explicitly triggered by adding files
+  // Removed ALL automatic processing to prevent infinite re-uploads
+  // The queue will ONLY process when addFilesToQueue is called
 
   const addFilesToQueue = useCallback((files: File[]) => {
     const store = useUploadStore.getState();
     
-    console.log('useUploadQueue: Adding files to queue:', files.length, files.map(f => f.name));
+    // console.log('useUploadQueue: Adding files to queue:', files.length, files.map(f => f.name));
     
     // Add all files to the queue
     files.forEach(file => {

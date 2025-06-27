@@ -21,6 +21,14 @@ export function useAnalysisData(jobId: string) {
     staleTime: Infinity, // Results don't change once analysis is complete
   });
 
+  // Fetch signed audio URL when job is completed
+  const { data: signedAudioUrl, isLoading: audioUrlLoading, error: audioUrlError } = useQuery({
+    queryKey: ['analysis', 'audioUrl', jobId],
+    queryFn: () => analysisApi.getSignedAudioUrl(jobId),
+    enabled: jobStatus?.status === 'completed' && !!jobId,
+    staleTime: 3000000, // Cache for 50 minutes (token valid for 1 hour)
+  });
+
   // Process and normalize data for visualization
   const processedData = useMemo<ProcessedAnalysisData | null>(() => {
     if (!results || !jobStatus) return null;
@@ -28,20 +36,17 @@ export function useAnalysisData(jobId: string) {
     return processAnalysisData(results, jobStatus);
   }, [results, jobStatus]);
 
-  // Get audio URL
-  const audioUrl = useMemo(() => {
-    if (!jobId) return null;
-    return analysisApi.getAudioUrl(jobId);
-  }, [jobId]);
+  // Use signed URL if available, otherwise null
+  const audioUrl = signedAudioUrl || null;
 
   // Determine overall loading state
-  const isLoading = statusLoading || (jobStatus?.status === 'completed' && resultsLoading);
+  const isLoading = statusLoading || (jobStatus?.status === 'completed' && (resultsLoading || audioUrlLoading));
   
   // Determine if job is still processing
   const isProcessing = jobStatus?.status === 'processing' || jobStatus?.status === 'pending';
   
   // Combine errors
-  const error = statusError || resultsError;
+  const error = statusError || resultsError || audioUrlError;
 
   return {
     data: processedData,
