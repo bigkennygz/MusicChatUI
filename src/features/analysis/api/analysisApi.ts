@@ -50,4 +50,19 @@ export const analysisApi = {
     });
     return response.data;
   },
+
+  // Get audio file URL for playback
+  getAudioUrl: (jobId: string, stem?: string): string => {
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    if (stem) {
+      return `${baseUrl}/api/v1/analyze/${jobId}/audio/${stem}`;
+    }
+    return `${baseUrl}/api/v1/analyze/${jobId}/audio`;
+  },
+
+  // Get waveform peaks data
+  getWaveformPeaks: async (jobId: string): Promise<number[]> => {
+    const response = await apiClient.get(`/api/v1/analyze/${jobId}/waveform`);
+    return response.data.peaks;
+  },
 };

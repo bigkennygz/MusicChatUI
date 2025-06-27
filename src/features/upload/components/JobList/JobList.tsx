@@ -25,10 +25,14 @@ export function JobList({ filter = 'all', onJobSelect }: JobListProps) {
   if (error) return <div className="text-center py-4 text-red-600">Error loading jobs</div>;
   if (!data) return null;
 
+  // Ensure data.items exists and is an array
+  console.log('JobList API response:', data);
+  const jobs = Array.isArray(data.items) ? data.items : [];
+
   return (
     <div className="space-y-4">
       <div className="grid gap-4">
-        {data.items.map((job) => (
+        {jobs.map((job) => (
           <JobStatusCard
             key={job.job_id}
             job={job}
@@ -37,7 +41,7 @@ export function JobList({ filter = 'all', onJobSelect }: JobListProps) {
         ))}
       </div>
       
-      {data.items.length === 0 && (
+      {jobs.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           No jobs found
         </div>

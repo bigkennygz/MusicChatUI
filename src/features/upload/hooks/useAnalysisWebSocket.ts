@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { wsManager } from '../../../lib/api/websocket';
+import { nativeWsManager } from '../../../lib/api/nativeWebsocket';
 import { useUploadStore } from '../stores/uploadStore';
 import type { AnalysisProgress } from '../../../types/analysis';
 
@@ -12,50 +12,39 @@ export function useAnalysisWebSocket(jobId: string | undefined) {
   useEffect(() => {
     if (!jobId) return;
 
-    // Connect WebSocket if not connected
-    if (!wsManager.isConnected()) {
-      wsManager.connect();
-    }
+    // Subscribe to WebSocket updates for this job
+    nativeWsManager.subscribe(jobId, (message) => {
+      const upload = getUploadByJobId(jobId);
+      if (!upload) return;
 
-    // Subscribe to job updates
-    wsManager.emit('analyze:subscribe', { job_id: jobId });
+      switch (message.type) {
+        case 'progress':
+          if (message.data) {
+            const progress: AnalysisProgress = {
+              job_id: jobId,
+              percentage: message.data.percentage || 0,
+              current_stage: message.data.current_stage || 'Processing',
+              current_activity: message.data.current_activity || 'Processing',
+              processing_rate: message.data.processing_rate || '',
+              estimated_time_remaining: message.data.estimated_time_remaining || 0,
+            };
+            updateAnalysisProgress(jobId, progress);
+          }
+          break;
 
-    // Event handlers
-    const handleProgress = (data: { job_id: string; progress: AnalysisProgress }) => {
-      if (data.job_id === jobId) {
-        updateAnalysisProgress(jobId, data.progress);
-      }
-    };
-
-    const handleCompleted = (data: { job_id: string }) => {
-      if (data.job_id === jobId) {
-        const upload = getUploadByJobId(jobId);
-        if (upload) {
+        case 'job_complete':
           completeUpload(upload.id);
-        }
-      }
-    };
+          break;
 
-    const handleFailed = (data: { job_id: string; error: string }) => {
-      if (data.job_id === jobId) {
-        const upload = getUploadByJobId(jobId);
-        if (upload) {
-          setUploadError(upload.id, data.error);
-        }
+        case 'error':
+          setUploadError(upload.id, message.data?.error || 'Analysis failed');
+          break;
       }
-    };
-
-    // Register listeners
-    wsManager.on(`analysis:progress:${jobId}`, handleProgress);
-    wsManager.on(`analysis:completed:${jobId}`, handleCompleted);
-    wsManager.on(`analysis:failed:${jobId}`, handleFailed);
+    });
 
     // Cleanup
     return () => {
-      wsManager.emit('analyze:unsubscribe', { job_id: jobId });
-      wsManager.off(`analysis:progress:${jobId}`, handleProgress);
-      wsManager.off(`analysis:completed:${jobId}`, handleCompleted);
-      wsManager.off(`analysis:failed:${jobId}`, handleFailed);
+      nativeWsManager.unsubscribe(jobId);
     };
   }, [jobId, updateAnalysisProgress, completeUpload, setUploadError, getUploadByJobId]);
 }

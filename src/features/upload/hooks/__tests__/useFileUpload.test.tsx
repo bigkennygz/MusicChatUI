@@ -95,7 +95,7 @@ describe('useFileUpload', () => {
       cancelUpload: vi.fn(),
     });
     
-    vi.mocked(mockUploadFile).mockImplementation(async (file, config) => {
+    vi.mocked(mockUploadFile).mockImplementation(async (_, config) => {
       // Simulate progress
       config?.onProgress?.({ loaded: 50, total: 100 } as AxiosProgressEvent);
       return { job_id: 'test-123' };

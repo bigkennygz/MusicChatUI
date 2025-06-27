@@ -8,25 +8,13 @@ export function showUploadError(fileName: string, error: string): void {
   toast.error(`Failed to upload ${fileName}: ${error}`);
 }
 
-export function showAnalysisComplete(jobId: string, fileName: string): void {
-  // Can't use useNavigate here since it's not a component/hook
-  // We'll create a navigation handler function that can be passed in
-  toast.success(`Analysis complete for ${fileName}!`, {
-    action: {
-      label: 'View Results',
-      onClick: () => {
-        // Navigate to analysis results
-        window.location.href = `/analysis/${jobId}`;
-      },
-    },
-    duration: 10000, // Show for 10 seconds
-  });
+export function showAnalysisComplete(_jobId: string, fileName: string): void {
+  toast.success(`Analysis complete for ${fileName}! Click to view results.`);
+  // For now, we'll have to handle navigation separately
 }
 
 export function showAnalysisError(fileName: string, error: string): void {
-  toast.error(`Analysis failed for ${fileName}: ${error}`, {
-    duration: 10000,
-  });
+  toast.error(`Analysis failed for ${fileName}: ${error}`);
 }
 
 export function showJobCancelled(fileName: string): void {

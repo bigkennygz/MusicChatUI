@@ -53,6 +53,8 @@ export function FileDropzone({
 
   const processFiles = useCallback((files: FileList | File[]) => {
     const fileArray = Array.from(files);
+    console.log('FileDropzone: Processing files:', fileArray.length, fileArray.map(f => f.name));
+    
     const validationResults = validateFiles(fileArray, { maxFiles, maxSize, acceptedFormats });
     
     const validFiles = fileArray.filter(file => validationResults.get(file)?.valid);
@@ -65,6 +67,7 @@ export function FileDropzone({
     }
     
     if (validFiles.length > 0) {
+      console.log('FileDropzone: Valid files:', validFiles.length, validFiles.map(f => f.name));
       setSelectedFiles(validFiles);
       onFilesSelected(validFiles);
     }

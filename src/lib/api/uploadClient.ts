@@ -91,7 +91,7 @@ export async function uploadFile(
   config?: UploadConfig
 ): Promise<{ job_id: string }> {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('files', file);
 
   const response = await uploadClient.post('/api/v1/analyze', formData, {
     headers: {

@@ -33,7 +33,7 @@ export function useBrowserNotifications() {
 
     if (options?.onClick) {
       notification.onclick = () => {
-        options.onClick();
+        options.onClick?.();
         notification.close();
         window.focus();
       };

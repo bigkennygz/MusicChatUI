@@ -72,6 +72,8 @@ export function useUploadQueue(options?: UseUploadQueueOptions) {
   const addFilesToQueue = useCallback((files: File[]) => {
     const store = useUploadStore.getState();
     
+    console.log('useUploadQueue: Adding files to queue:', files.length, files.map(f => f.name));
+    
     // Add all files to the queue
     files.forEach(file => {
       store.addUpload(file);

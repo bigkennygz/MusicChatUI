@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent } from '../../../components/ui/Card';
 import { FileDropzone } from '../components/FileDropzone';
 import { ActiveUploads } from '../components/ActiveUploads';
+import { CompletedUploads } from '../components/CompletedUploads';
 import { UploadWebSocketManager } from '../components/UploadWebSocketManager';
 import { UploadError } from '../components/UploadError';
 import { RecentJobs } from '../components/RecentJobs';
@@ -85,6 +86,9 @@ export function UploadPage() {
 
           {/* Active Uploads */}
           <ActiveUploads />
+
+          {/* Completed Uploads */}
+          <CompletedUploads />
 
           {/* Failed Uploads with Error Recovery */}
           {failedUploads.length > 0 && (

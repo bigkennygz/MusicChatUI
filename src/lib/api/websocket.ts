@@ -129,3 +129,6 @@ export class WebSocketManager {
 export const getWebSocketManager = (config?: WebSocketConfig): WebSocketManager => {
   return WebSocketManager.getInstance(config);
 };
+
+// Export a default instance for backward compatibility
+export const wsManager = WebSocketManager.getInstance();
